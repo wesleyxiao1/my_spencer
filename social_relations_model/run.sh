@@ -1,0 +1,1 @@
+python3 collect_data.py --input_file=data/group_track_data.csv --output_file=data/train_model_data.csv --n=1

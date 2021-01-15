@@ -1,0 +1,1 @@
+python3 social_relations.py --input_file=data/group_track_data.csv --social_relations=data/social_relations_data.csv --output_file=data/detected_groups.csv
