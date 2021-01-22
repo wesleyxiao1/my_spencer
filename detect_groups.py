@@ -106,17 +106,54 @@ def remapGroupId(groupId):
     trackGroups.groupIdRemapping.append( GroupIdRemapping(groupId, publishedGroupId) )
     return publishedGroupId
 
+class BoundingBox():
+    def __init__(self, x, y, height, width):
+        self.x = x
+        self.y = y
+        self.height = height
+        self.width = width
+
 class TrackedGroup():
     def __init__(self, groupID, pedIDs, x, y):
         self.groupID = groupID
         self.pedIDs = pedIDs
         self.x = x
         self.y = y
+        self.bbox = None
 
     def __str__(self):
-        pedIDs = " ".join(self.pedIDs)
-        out = [str(self.groupID), str(self.x), str(self.y), str(pedIDs)]
-        return ",".join(pedIDs)
+        out = [str(self.groupID), str(self.x), str(self.y)]
+        return ",".join(out)
+
+class GroupCentroid():
+    def __init__(self, pos=0, groupId=0, size=0):
+        self.pos = pos
+        self.groupId = groupId
+        self.size = size
+
+### Calculates group centroids for the current groups
+def calculateGroupCentroids(groups, trackedPersons):
+    # Get track positions
+    trackPositionsById = dict()
+    for track in trackedPersons.tracks:
+        pos = track.pose.pose.position            
+        trackPositionsById[track.track_id] = [ pos.x, pos.y ]
+
+    # Determine centroids
+    centroids = dict()
+    for groupId, track_ids in groups.iteritems():
+        positions = numpy.zeros( (len(track_ids), 2) )
+        trackIndex = 0
+        for track_id in track_ids:
+            positions[trackIndex, :] = trackPositionsById[track_id]
+            trackIndex += 1
+
+        currentCentroid = GroupCentroid()
+        currentCentroid.pos = numpy.mean(positions, 0)
+        currentCentroid.groupId = groupId
+        currentCentroid.size = len(track_ids)
+        centroids[groupId] = currentCentroid
+    return centroids
 
 # Associates current groups with previously tracked groups via track IDs
 def trackGroups(groups, trackedPersons):
@@ -185,7 +222,7 @@ def trackGroups(groups, trackedPersons):
                 if track_id in trackPositionsById:
                     accumulatedPosition += trackPositionsById[track_id]
                     activeTrackCount += 1
-
+        
             trackedGroup = TrackedGroup(groupID=remapGroupId(groupId), 
                                         pedIDs=track_ids,
                                         x=accumulatedPosition[0] / float(activeTrackCount),
@@ -194,6 +231,24 @@ def trackGroups(groups, trackedPersons):
 
     # Return currently tracked groups
     return trackedGroups
+
+def calcBoundingBoxes(trackedGroups, trackedPersons):
+    for group in trackedGroups:
+        X, Y = math.inf, math.inf
+        height = 0
+        width = 0
+        for ped in group.pedIDs:
+            currPed = trackedPersons.loc[trackedPersons.pedID == ped]
+            x = currPed.x
+            y = currPed.y
+            w = currPed.w
+            h = currPed.h
+
+            X = min(X, x)
+            Y = min(Y, y)
+            height = max(height, h)
+            width = max(width, w)
+        group.bbox = BoundingBox(X, Y, height, width)
 
 def parseArguments():
     parser = argparse.ArgumentParser()
@@ -210,7 +265,7 @@ def main():
     df_social_relations = pandas.read_csv(args.social_relations)
     df_tracking = pandas.read_csv(args.input_file)
 
-    header = "groupID,x,y,pedIDs"
+    header = "frameID,groupID,x,y,w,h"
     with open(args.output_file, "w") as file:
         file.write(header)
 
@@ -227,11 +282,18 @@ def main():
 
         # get groups in frame
         groups = detectGroups(trackedPersons, socialRelations)
+        calcBoundingBoxes(groups, trackedPersons)
 
         # write groups to outfile
         with open(args.output_file, "w") as file:
             for g in groups:
-                file.write(str(g))
+                out = ','.join([str(f), 
+                                str(g.groupID), 
+                                str(g.x), 
+                                str(g.y), 
+                                str(g.bbox.width),
+                                str(g.bbox.height)])
+                file.write(out)
 
 ### Entry point
 if __name__ == '__main__':
