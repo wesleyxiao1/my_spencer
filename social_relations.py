@@ -63,39 +63,45 @@ def delta_angle(det1, det2):
 def newTrackedPersonsReceived(trackedPersons, n):
     model = joblib.load('social_relations_model/data/social_relations_100000.model')
 
-    trackCount = len(trackedPersons)
     socialRelations = []
-    for t1_index in range(trackCount):
-        for t2_index in range(t1_index + 1, trackCount):
-            import pdb; pdb.set_trace
-            t1 = trackedPersons.iloc[t1_index]
-            t2 = trackedPersons.iloc[t2_index]
+    frames = trackedPersons.frameID.unique()
+    for current_frame in frames:
+        trackCount = trackedPersons.loc[trackedPersons.frameID == current_frame].pedID.unique()
+        for t1_index in trackCount:
+            for t2_index in trackCount:
+                if t1_index == t2_index:
+                    continue
+                t1 = trackedPersons.loc[trackedPersons.frameID == current_frame & \
+                                        trackedPersons.pedID == t1_index]
+                t2 = trackedPersons.loc[trackedPersons.frameID == current_frame & \
+                                        trackedPersons.pedID == t2_index]
 
-            # Calculate final feature values
-            dist = distance(t1, t2)
-            speed = delta_speed(t1, t2, trackedPersons, n)
-            angle = delta_angle(t1, t2)
-            
-            # Gating for large distance, very different velocities, or very different angle
-            if dist > maxDistance or speed > maxDeltaSpeed or angle > maxDeltaAngle:
-                positiveRelationProbability = 0.1
-                negativeRelationProbability = 0.9
-            else:
-                # Prepare SVM classifier
-                vector = np.array([[dist, speed, angle]])
+                # Calculate final feature values
+                dist = distance(t1, t2)
+                speed = delta_speed(t1, t2, trackedPersons, n)
+                angle = delta_angle(t1, t2)
+                
+                # Gating for large distance, very different velocities, or very different angle
+                if dist > maxDistance or speed > maxDeltaSpeed or angle > maxDeltaAngle:
+                    positiveRelationProbability = 0.1
+                    negativeRelationProbability = 0.9
+                else:
+                    # Prepare SVM classifier
+                    vector = np.array([[dist, speed, angle]])
 
-                # Run SVM classifier
-                positiveRelationProbability = model.predict_proba(vector)[:,1]
-                negativeRelationProbability = 1 - positiveRelationProbability
+                    # Run SVM classifier
+                    positiveRelationProbability = model.predict_proba(vector)[:,1]
+                    negativeRelationProbability = 1 - positiveRelationProbability
 
-            # Store results for this pair of tracks
-            if isinstance(positiveRelationProbability, float):
-                socialRelation = SocialRelation(positiveRelationProbability, t1['pedID'], t2['pedID'], t1['frameID'])
-            else:
-                socialRelation = SocialRelation(positiveRelationProbability[0], t1['pedID'], t2['pedID'], t1['frameID'])    
-                 
-            socialRelations.append(socialRelation)
-
+                # Store results for this pair of tracks
+                if isinstance(positiveRelationProbability, float):
+                    socialRelation = SocialRelation(positiveRelationProbability, t1['pedID'], t2['pedID'], t1['frameID'])
+                else:
+                    socialRelation = SocialRelation(positiveRelationProbability[0], t1['pedID'], t2['pedID'], t1['frameID'])    
+                    
+                socialRelations.append(socialRelation)
+        if current_frame % 5 == 0:
+            print(current_frame)
     return socialRelations
 
 def parseArguments():
