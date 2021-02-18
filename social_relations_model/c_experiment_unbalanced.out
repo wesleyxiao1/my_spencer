@@ -1,0 +1,218 @@
+2021-02-04 12:27:05 Starting to train SVM
+/usr/local/lib/python3.5/dist-packages/sklearn/svm/base.py:929: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  "the number of iterations.", ConvergenceWarning)
+2021-02-04 12:28:16 =======penalty_100=======
+2021-02-04 12:28:16 Testing on val set
+2021-02-04 12:28:16 [[134783   6119]
+ [ 18655   2107]]
+2021-02-04 12:28:16               precision    recall  f1-score   support
+
+          -1       0.88      0.96      0.92    140902
+           1       0.26      0.10      0.15     20762
+
+    accuracy                           0.85    161664
+   macro avg       0.57      0.53      0.53    161664
+weighted avg       0.80      0.85      0.82    161664
+
+2021-02-04 12:28:16 Testing on test set
+2021-02-04 12:28:16 [[92730  4955]
+ [16174  2089]]
+2021-02-04 12:28:16               precision    recall  f1-score   support
+
+          -1       0.85      0.95      0.90     97685
+           1       0.30      0.11      0.17     18263
+
+    accuracy                           0.82    115948
+   macro avg       0.57      0.53      0.53    115948
+weighted avg       0.76      0.82      0.78    115948
+
+2021-02-04 12:28:16 writing to outfile
+2021-02-04 12:28:16 finished
+
+2021-02-04 12:28:17 Starting to train SVM
+/usr/local/lib/python3.5/dist-packages/sklearn/svm/base.py:929: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  "the number of iterations.", ConvergenceWarning)
+2021-02-04 12:29:26 =======penalty_10=======
+2021-02-04 12:29:26 Testing on val set
+2021-02-04 12:29:26 [[140498    404]
+ [ 20345    417]]
+2021-02-04 12:29:26               precision    recall  f1-score   support
+
+          -1       0.87      1.00      0.93    140902
+           1       0.51      0.02      0.04     20762
+
+    accuracy                           0.87    161664
+   macro avg       0.69      0.51      0.48    161664
+weighted avg       0.83      0.87      0.82    161664
+
+2021-02-04 12:29:26 Testing on test set
+2021-02-04 12:29:26 [[97097   588]
+ [18015   248]]
+2021-02-04 12:29:27               precision    recall  f1-score   support
+
+          -1       0.84      0.99      0.91     97685
+           1       0.30      0.01      0.03     18263
+
+    accuracy                           0.84    115948
+   macro avg       0.57      0.50      0.47    115948
+weighted avg       0.76      0.84      0.77    115948
+
+2021-02-04 12:29:27 writing to outfile
+2021-02-04 12:29:27 finished
+
+2021-02-04 12:29:27 Starting to train SVM
+/usr/local/lib/python3.5/dist-packages/sklearn/svm/base.py:929: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  "the number of iterations.", ConvergenceWarning)
+2021-02-04 12:30:32 =======penalty_1=======
+2021-02-04 12:30:32 Testing on val set
+2021-02-04 12:30:33 [[140880     22]
+ [ 20742     20]]
+2021-02-04 12:30:33               precision    recall  f1-score   support
+
+          -1       0.87      1.00      0.93    140902
+           1       0.48      0.00      0.00     20762
+
+    accuracy                           0.87    161664
+   macro avg       0.67      0.50      0.47    161664
+weighted avg       0.82      0.87      0.81    161664
+
+2021-02-04 12:30:33 Testing on test set
+2021-02-04 12:30:33 [[97654    31]
+ [18255     8]]
+2021-02-04 12:30:33               precision    recall  f1-score   support
+
+          -1       0.84      1.00      0.91     97685
+           1       0.21      0.00      0.00     18263
+
+    accuracy                           0.84    115948
+   macro avg       0.52      0.50      0.46    115948
+weighted avg       0.74      0.84      0.77    115948
+
+2021-02-04 12:30:33 writing to outfile
+2021-02-04 12:30:33 finished
+
+2021-02-04 12:30:34 Starting to train SVM
+/usr/local/lib/python3.5/dist-packages/sklearn/svm/base.py:929: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  "the number of iterations.", ConvergenceWarning)
+2021-02-04 12:31:32 =======penalty_0.1=======
+2021-02-04 12:31:32 Testing on val set
+2021-02-04 12:31:32 [[140892     10]
+ [ 20760      2]]
+2021-02-04 12:31:33               precision    recall  f1-score   support
+
+          -1       0.87      1.00      0.93    140902
+           1       0.17      0.00      0.00     20762
+
+    accuracy                           0.87    161664
+   macro avg       0.52      0.50      0.47    161664
+weighted avg       0.78      0.87      0.81    161664
+
+2021-02-04 12:31:33 Testing on test set
+2021-02-04 12:31:33 [[97672    13]
+ [18263     0]]
+2021-02-04 12:31:33               precision    recall  f1-score   support
+
+          -1       0.84      1.00      0.91     97685
+           1       0.00      0.00      0.00     18263
+
+    accuracy                           0.84    115948
+   macro avg       0.42      0.50      0.46    115948
+weighted avg       0.71      0.84      0.77    115948
+
+2021-02-04 12:31:33 writing to outfile
+2021-02-04 12:31:33 finished
+
+2021-02-04 12:31:33 Starting to train SVM
+/usr/local/lib/python3.5/dist-packages/sklearn/svm/base.py:929: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  "the number of iterations.", ConvergenceWarning)
+2021-02-04 12:32:25 =======penalty_0.01=======
+2021-02-04 12:32:25 Testing on val set
+2021-02-04 12:32:25 [[140898      4]
+ [ 20761      1]]
+2021-02-04 12:32:25               precision    recall  f1-score   support
+
+          -1       0.87      1.00      0.93    140902
+           1       0.20      0.00      0.00     20762
+
+    accuracy                           0.87    161664
+   macro avg       0.54      0.50      0.47    161664
+weighted avg       0.79      0.87      0.81    161664
+
+2021-02-04 12:32:25 Testing on test set
+2021-02-04 12:32:25 [[97679     6]
+ [18263     0]]
+2021-02-04 12:32:25               precision    recall  f1-score   support
+
+          -1       0.84      1.00      0.91     97685
+           1       0.00      0.00      0.00     18263
+
+    accuracy                           0.84    115948
+   macro avg       0.42      0.50      0.46    115948
+weighted avg       0.71      0.84      0.77    115948
+
+2021-02-04 12:32:25 writing to outfile
+2021-02-04 12:32:25 finished
+
+2021-02-04 12:32:26 Starting to train SVM
+/usr/local/lib/python3.5/dist-packages/sklearn/svm/base.py:929: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+  "the number of iterations.", ConvergenceWarning)
+2021-02-04 12:33:08 =======penalty_0.001=======
+2021-02-04 12:33:08 Testing on val set
+2021-02-04 12:33:08 [[140901      1]
+ [ 20762      0]]
+2021-02-04 12:33:08               precision    recall  f1-score   support
+
+          -1       0.87      1.00      0.93    140902
+           1       0.00      0.00      0.00     20762
+
+    accuracy                           0.87    161664
+   macro avg       0.44      0.50      0.47    161664
+weighted avg       0.76      0.87      0.81    161664
+
+2021-02-04 12:33:08 Testing on test set
+2021-02-04 12:33:08 [[97683     2]
+ [18263     0]]
+2021-02-04 12:33:08               precision    recall  f1-score   support
+
+          -1       0.84      1.00      0.91     97685
+           1       0.00      0.00      0.00     18263
+
+    accuracy                           0.84    115948
+   macro avg       0.42      0.50      0.46    115948
+weighted avg       0.71      0.84      0.77    115948
+
+2021-02-04 12:33:08 writing to outfile
+2021-02-04 12:33:08 finished
+
+2021-02-04 12:33:09 Starting to train SVM
+2021-02-04 12:33:19 =======penalty_0.0001=======
+2021-02-04 12:33:19 Testing on val set
+2021-02-04 12:33:19 [[140902      0]
+ [ 20762      0]]
+/usr/local/lib/python3.5/dist-packages/sklearn/metrics/classification.py:1437: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+2021-02-04 12:33:19               precision    recall  f1-score   support
+
+          -1       0.87      1.00      0.93    140902
+           1       0.00      0.00      0.00     20762
+
+    accuracy                           0.87    161664
+   macro avg       0.44      0.50      0.47    161664
+weighted avg       0.76      0.87      0.81    161664
+
+2021-02-04 12:33:19 Testing on test set
+2021-02-04 12:33:20 [[97685     0]
+ [18263     0]]
+/usr/local/lib/python3.5/dist-packages/sklearn/metrics/classification.py:1437: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+2021-02-04 12:33:20               precision    recall  f1-score   support
+
+          -1       0.84      1.00      0.91     97685
+           1       0.00      0.00      0.00     18263
+
+    accuracy                           0.84    115948
+   macro avg       0.42      0.50      0.46    115948
+weighted avg       0.71      0.84      0.77    115948
+
+2021-02-04 12:33:20 writing to outfile
+2021-02-04 12:33:20 finished

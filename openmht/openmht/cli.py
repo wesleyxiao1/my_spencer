@@ -19,7 +19,7 @@ __license__ = "GPL-3.0"
 __version__ = "0.1.0"
 
 
-def read_uv_csv(file_path, frame_max=100):
+def read_uv_csv(file_path, frame_max=500):
     """
     Read detections from a CSV.
     Expected column headers are:

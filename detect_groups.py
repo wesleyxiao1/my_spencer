@@ -6,9 +6,10 @@ import pandas
 import argparse
 
 # Main callback when new social relations and person tracks are available     
-def detectGroups(trackedPersons, socialRelations):
+def detectGroups(trackedPersons, socialRelations, timestamp):
     # Collect track positions in matrix (rows = tracks, cols = x and y coordinates)
-    trackCount = len(trackedPersons.pedID.unique())
+    #trackCount = len(trackedPersons.pedID.unique())
+    trackCount = len(trackedPersons)
 
     # Create a lookup from arbitrary track IDs to zero-based track indices in distances matrix
     trackIndex = 0
@@ -38,14 +39,15 @@ def detectGroups(trackedPersons, socialRelations):
     trackDistances = scipy.spatial.distance.squareform(socialRelationsMatrix, force='tovector')
         
     # Cluster
-    relationThreshold = 0.5 # relation strength above which we consider tracks to be in a group
+    relationThreshold = 0.75 # relation strength above which we consider tracks to be in a group
     groupIndices = cluster(trackCount, trackDistances, relationThreshold) # outputs one group index per track
 
+    #import pdb; pdb.set_trace()
     # Create groups, by assembling one set of track IDs per group
     groups = createGroups(groupIndices, trackedPersons)
 
     # Associate newly created groups with groups from previous cycle for ID consistency, and generate TrackedGroup instances
-    trackedGroups = trackGroups(groups, trackedPersons)
+    trackedGroups = trackGroups(groups, trackedPersons, timestamp)
     return trackedGroups
 
 
@@ -156,7 +158,7 @@ def calculateGroupCentroids(groups, trackedPersons):
     return centroids
 
 # Associates current groups with previously tracked groups via track IDs
-def trackGroups(groups, trackedPersons):
+def trackGroups(groups, trackedPersons, timestamp):
     # Initialize variables
     publishSinglePersonGroups = False   # add to parameters of this script
     trackedGroups = []
@@ -164,6 +166,7 @@ def trackGroups(groups, trackedPersons):
 
     # Sort groups by smallest track ID per group to ensure reproducible group ID assignments
     #sortedGroups = sorted(groups.iteritems(), key=lambda (clusterId, track_ids) : sorted(track_ids)[0])
+    #import pdb; pdb.set_trace()
     sortedGroups = sorted(groups.items(), key=lambda group : sorted(group[1])[0])
 
     # Used to calculate group centroids
@@ -197,9 +200,8 @@ def trackGroups(groups, trackedPersons):
         assignedGroupIds.append(groupId)
 
         # Remember which group ID we assigned to this combination of track IDs
-        '''
         groupIdAssignmentsToRemove = []
-        groupExistsSince = trackedPersons.header.stamp.to_sec()
+        groupExistsSince = timestamp
         for groupIdAssignment in trackGroups.groupIdAssignmentMemory:
             if set(track_ids) == groupIdAssignment.trackIds:
                 groupExistsSince = min(groupIdAssignment.createdAt, groupExistsSince)
@@ -209,7 +211,7 @@ def trackGroups(groups, trackedPersons):
             trackGroups.groupIdAssignmentMemory.remove(groupIdAssignment) 
 
         trackGroups.groupIdAssignmentMemory.append( GroupIdAssignment(track_ids, groupId, groupExistsSince) )
-        '''
+        
         # Remember largest group ID used so far
         if(groupId > trackGroups.largestGroupId):
             trackGroups.largestGroupId = groupId
@@ -239,10 +241,10 @@ def calcBoundingBoxes(trackedGroups, trackedPersons):
         width = 0
         for ped in group.pedIDs:
             currPed = trackedPersons.loc[trackedPersons.pedID == ped]
-            x = currPed.x
-            y = currPed.y
-            w = currPed.w
-            h = currPed.h
+            x = currPed.iloc[0].x
+            y = currPed.iloc[0].y
+            w = currPed.iloc[0].w
+            h = currPed.iloc[0].h
 
             X = min(X, x)
             Y = min(Y, y)
@@ -265,9 +267,11 @@ def main():
     df_social_relations = pandas.read_csv(args.social_relations)
     df_tracking = pandas.read_csv(args.input_file)
 
+    df_tracking = df_tracking.loc[((df_tracking.dataset == 'test') & (df_tracking.segment_num == 1))]
+
     header = "frameID,groupID,x,y,w,h"
     with open(args.output_file, "w") as file:
-        file.write(header)
+        file.write(header + "\n")
 
     trackGroups.largestGroupId = -1
     trackGroups.groupIdAssignmentMemory = deque(maxlen=300)
@@ -276,16 +280,23 @@ def main():
 
     # detect groups frame by frame
     frames = df_tracking.frameID.unique()
+    timestamp = 0
+    '''
+    n = 4
+    for f in frames[::n]:
+        f_end = f + n - 1
+        trackedPersons = df_tracking.loc[((df_tracking.frameID >= f) & (df_tracking.frameID <= f_end))]
+        socialRelations = df_social_relations.loc[((df_social_relations.frameID >= f) & (df_social_relations.frameID <= f_end))]
+    '''
     for f in frames:
-        trackedPersons = df_tracking.loc[df_tracking.frameID == f]
-        socialRelations = df_social_relations.loc[df_social_relations.frameID == f]
-
+        trackedPersons = df_tracking.loc[(df_tracking.frameID == f)]
+        socialRelations = df_social_relations.loc[(df_social_relations.frameID == f)]
         # get groups in frame
-        groups = detectGroups(trackedPersons, socialRelations)
+        groups = detectGroups(trackedPersons, socialRelations, timestamp)
         calcBoundingBoxes(groups, trackedPersons)
 
         # write groups to outfile
-        with open(args.output_file, "w") as file:
+        with open(args.output_file, "a+") as file:
             for g in groups:
                 out = ','.join([str(f), 
                                 str(g.groupID), 
@@ -293,7 +304,13 @@ def main():
                                 str(g.y), 
                                 str(g.bbox.width),
                                 str(g.bbox.height)])
-                file.write(out)
+                file.write(out + "\n")
+
+        if f % 100 == 0:
+            from datetime import datetime
+            now = datetime.now().time() # time object
+            print(f,now)
+        timestamp += 1
 
 ### Entry point
 if __name__ == '__main__':

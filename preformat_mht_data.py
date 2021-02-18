@@ -16,16 +16,15 @@ def main():
 
     header = "frame,u,v"
     with open(args.output_file, "w") as file:
-        file.write(header)
-
-    for _, row in df.iterrows():
-        x = row.x
-        y = row.y
-        frame = row.frameID
-
-        with open(args.output_file, "w") as file:
+        file.write(header + "\n")
+    
+    with open(args.output_file, "a+") as file:
+        for _, row in df.loc[df.frameID > 18002].iterrows():
+            x = row.x
+            y = row.y
+            frame = int(row.frameID)
             out = ','.join([str(frame), str(x), str(y)])
-            file.write(out)
+            file.write(out + "\n")
 
     '''
     # get the bounding boxes and break them down to their four coordinates

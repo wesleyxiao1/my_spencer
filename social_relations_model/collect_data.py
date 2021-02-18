@@ -62,7 +62,7 @@ def output_data(filename, data):
 # 0 = not in same group
 def collect_data(infile, outfile, n):
     df = pandas.read_csv(infile)
-    df = df.loc[df.dataset == "train"]
+    #df = df.loc[df.dataset == "train"]
     
     ped_pairs = defaultdict(list)
     for frameID in df.frameID.unique():
