@@ -246,12 +246,13 @@ def calcBoundingBoxes(trackedGroups, trackedPersons):
             h = currPed.iloc[0].h
             
             xs.extend([x, x+w])
-            ys.extend([y, y+w])
+            ys.extend([y, y+h])
+
         X = min(xs)
         Y = min(ys)
         height = max(ys) - min(ys)
         width = max(xs) - min(xs)
-        group.bbox = BoundingBox(X, Y, height, width)
+        group.bbox = BoundingBox(round(X,3), round(Y,3), round(height,3), round(width,3))
 
 def parseArguments():
     parser = argparse.ArgumentParser()
