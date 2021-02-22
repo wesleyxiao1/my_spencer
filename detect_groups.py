@@ -236,20 +236,21 @@ def trackGroups(groups, trackedPersons, timestamp):
 
 def calcBoundingBoxes(trackedGroups, trackedPersons):
     for group in trackedGroups:
-        X, Y = math.inf, math.inf
-        height = 0
-        width = 0
+        xs = []
+        ys = []
         for ped in group.pedIDs:
             currPed = trackedPersons.loc[trackedPersons.pedID == ped]
             x = currPed.iloc[0].x
             y = currPed.iloc[0].y
             w = currPed.iloc[0].w
             h = currPed.iloc[0].h
-
-            X = min(X, x)
-            Y = min(Y, y)
-            height = max(height, h)
-            width = max(width, w)
+            
+            xs.extend([x, x+w])
+            ys.extend([y, y+w])
+        X = min(xs)
+        Y = min(ys)
+        height = max(ys) - min(ys)
+        width = max(xs) - min(xs)
         group.bbox = BoundingBox(X, Y, height, width)
 
 def parseArguments():
