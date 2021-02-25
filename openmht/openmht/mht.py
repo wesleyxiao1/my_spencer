@@ -54,6 +54,10 @@ class MHT:
             coordinates.append({})
             detections = self.__detections.pop(0)
             logging.info("Frame {}: {} detections".format(frame_index, len(detections)))
+            if len(detections) == 0:
+                frame_index += 1
+                continue
+
             track_count = len(kalman_filters)
             for index, detection in enumerate(detections):
                 detection_id = str(index)

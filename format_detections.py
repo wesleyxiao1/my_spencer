@@ -23,17 +23,19 @@ def main():
             aw = 'w'
             f.append(outfile)
         with open(outfile, aw) as file:
-            print(row.values.tolist())
+            max_frame = round(df.loc[((df.dataset == dataset) & (df.segment_num == group_num))].frameID.min(), -3)
             out = row.values.tolist()
 
             out[0] = int(out[0])
-            out[0] = int(out[0] % 18000)
+            out[0] = int(out[0] % max_frame)
 
             out[1] = int(out[1])
             out += [-1, -1, -1, -1]
             out = ','.join([str(x) for x in out])
-            print(out + "\n")
             file.write(out + "\n")
+        
+        if row.frameID % 1000 == 0:
+            print(row.frameID)
 
     eval_dir = "data/eval/test/"
     for f in os.listdir(eval_dir):

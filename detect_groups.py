@@ -235,6 +235,7 @@ def trackGroups(groups, trackedPersons, timestamp):
     return trackedGroups
 
 def calcBoundingBoxes(trackedGroups, trackedPersons):
+    #import pdb; pdb.set_trace()
     for group in trackedGroups:
         xs = []
         ys = []
@@ -269,7 +270,8 @@ def main():
     df_social_relations = pandas.read_csv(args.social_relations)
     df_tracking = pandas.read_csv(args.input_file)
 
-    df_tracking = df_tracking.loc[((df_tracking.dataset == 'test') & (df_tracking.segment_num == 1))]
+    #df_tracking = df_tracking.loc[((df_tracking.dataset == 'test') & (df_tracking.segment_num == 1))]
+    df_tracking = df_tracking.loc[(df_tracking.dataset == 'test')]
 
     header = "frameID,groupID,x,y,w,h"
     with open(args.output_file, "w") as file:
@@ -302,8 +304,8 @@ def main():
             for g in groups:
                 out = ','.join([str(f), 
                                 str(g.groupID), 
-                                str(g.x), 
-                                str(g.y), 
+                                str(g.bbox.x), 
+                                str(g.bbox.y), 
                                 str(g.bbox.width),
                                 str(g.bbox.height)])
                 file.write(out + "\n")

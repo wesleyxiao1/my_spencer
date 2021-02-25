@@ -1,1 +1,1 @@
-python3 preformat_mht_data.py --input_file=data/detected_groups.csv --output_file=data/detected_groups_test_formatted.csv
+python3 preformat_mht_data.py --input_file=data/detected_groups_test1.csv --output_file=data/detected_groups_test_formatted.csv

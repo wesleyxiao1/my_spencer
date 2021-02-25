@@ -37,6 +37,7 @@ def read_uv_csv(file_path, frame_max=500):
                 line_count += 1
             else:
                 frame_number, u, v = int(row[0]), float(row[1]), float(row[2])
+                '''
                 if frame_number != current_frame:
                     detection_index = len(detections)
                     if detection_index == frame_max:
@@ -44,8 +45,15 @@ def read_uv_csv(file_path, frame_max=500):
 
                     detections.append([])
                     current_frame = frame_number
-
                 detections[detection_index].append([u, v])
+                '''
+                if frame_number != current_frame:
+                    detection_index = len(detections)
+                    for i in range(detection_index, frame_number + 1):
+                        detections.append([])
+                    current_frame = frame_number
+
+                detections[frame_number].append([u,v])
                 line_count += 1
 
         #logging.info(f'Reading inputs complete. Processed {line_count-1} detections across {len(detections)} frames.')
