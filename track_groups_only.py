@@ -301,7 +301,10 @@ def main():
                     now = datetime.now().time() # time object
                     print(current_frame, now)
 
-            pedIDs = [int(c) for c in content[1:]]
+            if 'robogem' in group_detections_file:
+                pedIDs = [int(c) for c in content[1:]]
+            else:
+                pedIDs = [int(c) for c in content[2:]]
 
             groups[group_index] = pedIDs
             group_index += 1
