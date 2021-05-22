@@ -1,0 +1,3 @@
+#python3 track_groups_only.py --input_file=data/group_track_data.csv --social_relations=data/social_relations_data2.csv --group_detections=NCuts_Group_Detections.txt --output_file=data/detected_groups_robogem2.csv
+#python3 track_groups_only.py --input_file=data/group_track_data.csv --social_relations=data/social_relations_data2.csv --group_detections=SC_Group_Detections_v2.txt --output_file=data/detected_groups_robogem2.csv
+python3 track_groups_only.py --input_file=data/group_track_data.csv --social_relations=data/social_relations_data2.csv --group_detections=robogem2_group_detections_v2.txt --output_file=data/detected_groups_robogem2.csv

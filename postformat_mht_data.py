@@ -1,6 +1,7 @@
 import pandas
 import argparse
 import math
+import os
 
 # Takes in the group detections and formats it for MHT
 def parseArguments():
@@ -12,23 +13,32 @@ def parseArguments():
 
 def main():
     #args = parseArguments()
-
+    input_dir = "data/det_formatted/"
     in_dir = "data/tracking_results_current/"
     out_dir = "data/tracking_results_formatted/"
     if not os.path.isdir(out_dir):
         os.mkdir(out_dir)
-    for ifile in os.listdir():
+    
+    in_files = os.listdir(in_dir)
+    in_files.sort(key=lambda x : int(x.split('-')[-1].split('.')[0]))
+
+    for ifile in in_files:
         df_mht = pandas.read_csv(in_dir + ifile)
         ofile = out_dir + ifile[:8] + '.csv'
 
         if not os.path.exists(ofile):
             header = "frameID,groupID,x,y,w,h"
-            with open(args.output_file, "w") as file:
+            with open(ofile, "w") as file:
                 file.write(header)
 
         # mht output frames --> actual frame id
-        frame_map = {}
-        
+        df_mht_inputs = pandas.read_csv(input_dir + ifile)
+        actual_frames = df_mht_inputs.frame.unique().tolist()
+        mht_frames = df_mht.frame.unique().tolist()
+        actual_frames.sort()
+        mht_frames.sort()
+
+        frame_map = {zip(mht_frames, actual_frames)}
 
         for _, row in df_mht.iterrows():
             groupID = row.track

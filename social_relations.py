@@ -138,8 +138,8 @@ def main():
         outfile.write(header)
 
     df = pandas.read_csv(args.input_file)
-    data = df.loc[df.dataset == 'test']
-    #data = df
+    #data = df.loc[df.dataset == 'test']
+    data = df
     socialRelations = newTrackedPersonsReceived(data, args.num_frames_for_speed, args.output_file)
 
     '''

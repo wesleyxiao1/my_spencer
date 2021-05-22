@@ -4,10 +4,16 @@ import os
 import shutil
 
 def main():
-    dets = pandas.read_csv("data/detected_groups_test1.csv")
+    #dets = pandas.read_csv("data/detected_groups_test2.csv")
+    dets = pandas.read_csv("data/detected_groups_robogem2.csv")
     df = pandas.read_csv("data/group_track_data.csv")
     
     f = []
+    files = ['data/eval/test/group-0'+str(x)+'/det/det.txt' for x in range(1, 7)]
+    for x in files:
+        with open(x, "w") as fp:
+            pass
+    
     for _, row in dets.iterrows():
         d = df.loc[df.frameID == row.frameID]
         dataset = d.iloc[0].dataset
@@ -36,11 +42,10 @@ def main():
         
         if row.frameID % 1000 == 0:
             print(row.frameID)
-
     eval_dir = "data/eval/test/"
     for f in os.listdir(eval_dir):
-        print(f)
-        if f == "dets":
+        #print(f)
+        if "dets" in f:
             continue
         src = eval_dir + f + "/det/det.txt"
         dst = eval_dir + "dets/" + f + ".txt"

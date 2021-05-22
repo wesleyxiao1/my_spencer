@@ -164,7 +164,10 @@ for c in c_values:
     name = "pen_"+str(c)+"_unnorm_train+valid"
     train(c=c, class_weight=None, name=name, data="data/model_data.csv", training_only=False)
 '''
-train(c=1, class_weight='balanced', name="penalty_1_norm_angle", data="data/model_data_normalized.csv", drop=["dist", "speed"])
+#train(c=1, class_weight='balanced', name="penalty_1_norm_angle", data="data/model_data_normalized.csv", drop=["dist", "speed"])
+train(name="01_group_labels", data="data/model_data_01_group_labels.csv")
+train(name="norm_per_frame", data="data/model_data_norm_per_frame.csv")
+train(name="norm_per_frame_01_group_labels", data="data/model_data_norm_per_frame_01_group_labels.csv")
 
 #train_svm(c=1, class_weight=None, name="penalty_1_SVC")
 #train_svm(c=1, class_weight='balanced', name="penalty_1_balanced_SVC")

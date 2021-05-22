@@ -271,11 +271,16 @@ def main():
     df_tracking = pandas.read_csv(args.input_file)
 
     #df_tracking = df_tracking.loc[((df_tracking.dataset == 'test') & (df_tracking.segment_num == 1))]
-    df_tracking = df_tracking.loc[(df_tracking.dataset == 'test')]
+    #df_tracking = df_tracking.loc[(df_tracking.dataset == 'test')]
 
     header = "frameID,groupID,x,y,w,h"
     with open(args.output_file, "w") as file:
         file.write(header + "\n")
+    
+    header1 = "frameID, groupID, pedIDs"
+    ped_outfile = "data/detected_groups_test2_pedIDs.csv"
+    with open(ped_outfile, "w") as file:
+        file.write(header1 + "\n")
 
     trackGroups.largestGroupId = -1
     trackGroups.groupIdAssignmentMemory = deque(maxlen=300)
@@ -309,8 +314,15 @@ def main():
                                 str(g.bbox.width),
                                 str(g.bbox.height)])
                 file.write(out + "\n")
+        with open(ped_outfile, "a+") as file:
+            for g in groups:
+                pedIDs = ','.join([str(x) for x in g.pedIDs])
+                out = ','.join([str(f), 
+                                str(g.groupID), 
+                                pedIDs])
+                file.write(out + "\n")
 
-        if f % 100 == 0:
+        if f % 1000 == 0:
             from datetime import datetime
             now = datetime.now().time() # time object
             print(f,now)

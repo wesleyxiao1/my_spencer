@@ -32,6 +32,7 @@ def read_uv_csv(file_path, frame_max=500):
         line_count = 0
         current_frame = None
         detection_index = 0
+        prev_det = []
         for row in csv_reader:
             if line_count == 0:
                 line_count += 1

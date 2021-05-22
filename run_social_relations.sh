@@ -1,1 +1,1 @@
-python3 social_relations.py --input_file=data/group_track_data.csv --output_file=data/social_relations_data.csv --num_frames_for_speed=1
+python3 social_relations.py --input_file=data/group_track_data.csv --output_file=data/social_relations_data2.csv --num_frames_for_speed=1
